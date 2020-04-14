@@ -35,12 +35,23 @@ def get_impact(data, severe):
     cases = data.get('reportedCases')
     period_type = data.get('periodType')
     expected_time = data.get('timeToElapse')
+    total_beds = data.get('totalHospitalBeds')
     requested_time = get_requested_time_in_days(period_type, expected_time)
     currently_infected = get_currently_infected(cases, severe)
-    infections_by_time = get_infections_by_requested_time(currently_infected, requested_time)
+    infections_by_time = get_infections_by_requested_time(
+        currently_infected,
+        requested_time
+    )
+    severe_cases = get_severe_cases_by_requested_time(infections_by_time)
+    available_beds = get_expected_available_beds_by_time(
+        total_beds,
+        severe_cases
+    )
     return {
         'currentlyInfected': currently_infected,
-        'infectionsByRequestedTime': infections_by_time
+        'infectionsByRequestedTime': infections_by_time,
+        'severeCasesByRequestedTime': severe_cases,
+        'hospitalBedsByRequestedTime': available_beds,
     }
 
 def get_currently_infected(reported_cases, severe):
@@ -66,3 +77,12 @@ def get_requested_time_in_days(period_type, time_to_elapse):
         return time_to_elapse * 7
     else:
         return time_to_elapse
+
+def get_severe_cases_by_requested_time(infections_by_time):
+    # severity cases that will require hospitalization are 0.15 * infections_by_time
+    return int(0.15 * infections_by_time)
+
+def get_expected_available_beds_by_time(total_hospital_beds, severe_cases):
+    # expected hospital beds for COVID-19 is 0.35 * totalHospitalBeds
+    available_beds = 0.35 * total_hospital_beds
+    return int(available_beds - severe_cases)
