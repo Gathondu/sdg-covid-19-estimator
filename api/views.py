@@ -10,7 +10,7 @@ from src.estimator import estimator
 @api_view(['POST',])
 def index(request):
     data = parse_request(request.data)
-    return Response(estimator(data))\
+    return Response(estimator(data))
 
 
 @api_view(['POST',])
