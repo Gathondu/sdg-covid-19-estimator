@@ -5,4 +5,5 @@ import api.views as views
 urlpatterns = [
     path('', views.index),
     path('json/', views.index),
+    path('xml/', views.xml),
 ]
