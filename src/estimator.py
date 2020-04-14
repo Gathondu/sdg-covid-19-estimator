@@ -24,7 +24,7 @@ output should be an object in the format of:
 
 def estimator(data):
     return {
-        data: data,
+        'data': data,
         'impact': get_impact(data, False),
         'severeImpact': get_impact(data, True)
     }
