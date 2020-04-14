@@ -64,17 +64,17 @@ def get_infections_by_requested_time(currently_infected, requested_time):
     # the requested time should be a value in days
     factor = requested_time // 3
     multiplier = 2 ** factor
-    return int(currently_infected * multiplier)
+    return currently_infected * multiplier
 
 
 def get_requested_time_in_days(period_type, time_to_elapse):
     # period time can either be months, weeks or days
     if period_type == 'months':
         # a month is assumed to have 30 days
-        return int(time_to_elapse * 30)
+        return time_to_elapse * 30
     elif period_type == 'weeks':
         # a week is assumed to have 7 days
-        return int(time_to_elapse * 7)
+        return time_to_elapse * 7
     else:
         return time_to_elapse
 
