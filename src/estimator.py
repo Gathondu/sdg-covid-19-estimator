@@ -21,6 +21,7 @@ output should be an object in the format of:
     severeImpact: {} // your severe case estimation
 }
 '''
+from math import floor
 
 def estimator(data):
     return {
@@ -84,5 +85,5 @@ def get_severe_cases_by_requested_time(infections_by_time):
 
 def get_expected_available_beds_by_time(total_hospital_beds, severe_cases):
     # expected hospital beds for COVID-19 is 0.35 * totalHospitalBeds
-    avaliable_beds = int(0.35 * total_hospital_beds)
-    return int(avaliable_beds - severe_cases)
+    avaliable_beds = floor(0.35 * total_hospital_beds)
+    return floor(avaliable_beds - severe_cases)
