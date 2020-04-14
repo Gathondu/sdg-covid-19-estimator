@@ -21,7 +21,6 @@ output should be an object in the format of:
     severeImpact: {} // your severe case estimation
 }
 '''
-import json
 
 def estimator(data):
     return {
@@ -37,7 +36,7 @@ def get_impact(data, severe):
     period_type = data.get('periodType')
     expected_time = int(data.get('timeToElapse'))
     total_beds = int(data.get('totalHospitalBeds'))
-    region_data = json.loads(data.get('region'))
+    region_data = data.get('region')
 
     requested_time = get_requested_time_in_days(period_type, expected_time)
     currently_infected = get_currently_infected(cases, severe)
@@ -113,7 +112,7 @@ def get_special_cases(infections_by_time, percentage):
 
 def get_dollars_in_flight(region_data, infections_by_time, requested_time):
     # get the estimate of how much the economy is likely to lose daily
-    daily_avg_income = int(region_data.get('avgDailyIncomeInUSD'))
-    daily_avg_income_pop = int(region_data.get('avgDailyIncomePopulation'))
+    daily_avg_income = float(region_data.get('avgDailyIncomeInUSD'))
+    daily_avg_income_pop = float(region_data.get('avgDailyIncomePopulation'))
     daily_infections = infections_by_time / requested_time
     return int(daily_infections * daily_avg_income * daily_avg_income_pop)
