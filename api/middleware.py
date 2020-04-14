@@ -39,7 +39,7 @@ class RequestLogMiddleware(MiddlewareMixin):
     def process_response(self, request, response):
         """Log data using logger."""
         log_data = self.extract_log_info(request)
-        msg = "'{} {} {} {}ms'".format(
+        msg = '{} {} {} {}ms'.format(
             log_data.get('request_method'),
             log_data.get('request_path'),
             response.status_code,
