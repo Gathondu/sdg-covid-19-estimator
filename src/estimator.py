@@ -23,23 +23,27 @@ output should be an object in the format of:
 '''
 
 def estimator(data):
-    return data
+    return {
+        data: data,
+        'impact': get_impact(data, False),
+        'severeImpact': get_impact(data, True)
+    }
 
 
-def get_impact(data, severe=False):
+def get_impact(data, severe):
     # get the value of impact
     cases = data.get('reportedCases')
     period_type = data.get('periodType')
     expected_time = data.get('timeToElapse')
     requested_time = get_requested_time_in_days(period_type, expected_time)
-    currently_infected = get_currently_infected(cases, severe=severe)
+    currently_infected = get_currently_infected(cases, severe)
     infections_by_time = get_infections_by_requested_time(currently_infected, requested_time)
     return {
         'currentlyInfected': currently_infected,
         'infectionsByRequestedTime': infections_by_time
     }
 
-def get_currently_infected(reported_cases, severe=False):
+def get_currently_infected(reported_cases, severe):
     if severe:
         return reported_cases * 50
     return reported_cases * 10
