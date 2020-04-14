@@ -36,6 +36,8 @@ def get_impact(data, severe):
     period_type = data.get('periodType')
     expected_time = data.get('timeToElapse')
     total_beds = data.get('totalHospitalBeds')
+    region_data = data.get('region')
+
     requested_time = get_requested_time_in_days(period_type, expected_time)
     currently_infected = get_currently_infected(cases, severe)
     infections_by_time = get_infections_by_requested_time(
@@ -52,7 +54,21 @@ def get_impact(data, severe):
         'infectionsByRequestedTime': infections_by_time,
         'severeCasesByRequestedTime': severe_cases,
         'hospitalBedsByRequestedTime': available_beds,
+        'casesForICUByRequestedTime': get_special_cases(
+            infections_by_time,
+            0.05
+        ),
+        'casesForVentilatorsByRequestedTime': get_special_cases(
+            infections_by_time,
+            0.02
+        ),
+        'dollarsInFlight': get_dollars_in_flight(
+            region_data,
+            infections_by_time,
+            requested_time
+        ),
     }
+
 
 def get_currently_infected(reported_cases, severe):
     if severe:
@@ -78,11 +94,25 @@ def get_requested_time_in_days(period_type, time_to_elapse):
     else:
         return time_to_elapse
 
+
 def get_severe_cases_by_requested_time(infections_by_time):
     # severity cases that will require hospitalization are 0.15 * infections_by_time
     return int(0.15 * infections_by_time)
+
 
 def get_expected_available_beds_by_time(total_hospital_beds, severe_cases):
     # expected hospital beds for COVID-19 is 0.35 * totalHospitalBeds
     available_beds = 0.35 * total_hospital_beds
     return int(available_beds - severe_cases)
+
+
+def get_special_cases(infections_by_time, percentage):
+    return int(infections_by_time * percentage)
+
+
+def get_dollars_in_flight(region_data, infections_by_time, requested_time):
+    # get the estimate of how much the economy is likely to lose daily
+    daily_avg_income = region_data.get('avgDailyIncomeInUSD')
+    daily_avg_income_pop = region_data.get('avgDailyIncomePopulation')
+    daily_infections = infections_by_time / requested_time
+    return int(daily_infections * daily_avg_income * daily_avg_income_pop)
