@@ -11,7 +11,7 @@ import time
 
 from django.utils.deprecation import MiddlewareMixin
 
-request_logger = logging.getLogger('django.request')
+request_logger = logging.getLogger('apiLogger')
 
 
 class RequestLogMiddleware(MiddlewareMixin):

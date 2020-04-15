@@ -128,7 +128,7 @@ LOGGING = {
         },
     },
     'loggers': {
-        'django.request': {
+        'apiLogger': {
             'handlers': ['file'],
             'level': 'INFO',
             'propagate': True,
