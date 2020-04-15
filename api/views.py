@@ -1,6 +1,7 @@
 import json
 import os
 
+from django.http import HttpResponse
 from rest_framework.decorators import api_view, renderer_classes
 from rest_framework.response import Response
 from rest_framework_xml.renderers import XMLRenderer
@@ -24,8 +25,7 @@ def xml(request):
 @api_view(['GET',])
 def logs(request):
     DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data = []
+    data = ''
     with open(os.path.join(DIR, 'requests.txt'), 'r') as reader:
-        for line in reader.readlines():
-            data.append(line.replace('\n', ''))
-    return Response(data, content_type='text/plain; charset=UTF-8')
+        data = reader.readlines()
+    return HttpResponse(data, content_type="text/plain")
