@@ -136,4 +136,4 @@ LOGGING = {
     },
 }
 
-django_heroku.settings(locals())
+django_heroku.settings(locals(), logging=False)

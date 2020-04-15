@@ -25,7 +25,7 @@ def xml(request):
 def logs(request):
     DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     data = []
-    with open(os.path.join(DIR, 'log.txt'), 'r') as reader:
+    with open(os.path.join(DIR, 'requests.txt'), 'r') as reader:
         for line in reader.readlines():
             data.append(line.replace('\n', ''))
     return Response(data, content_type='text/plain; charset=UTF-8')
