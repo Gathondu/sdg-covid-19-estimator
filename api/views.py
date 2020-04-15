@@ -24,7 +24,11 @@ def xml(request):
 @api_view(['GET',])
 def logs(request):
     DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    data = ''
+    data = []
     with open(os.path.join(DIR, 'requests.txt'), 'r') as reader:
-        data = reader.readlines()
-    return Response(data, content_type="text/plain")
+        for line in reader.readlines():
+            data.append(line.replace('\n', ''))
+    resp = Response(data, content_type='text/plain; charset=UTF-8')
+    resp['Content-Disposition'] = ('attachment; filename=res.txt')
+    return resp
+
